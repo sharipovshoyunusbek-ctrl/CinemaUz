@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #FFD700;
+  --primary-dark: #FFC700;
+  --accent: #FF1744;
+  --dark: #0a0a0f;
+  --darker: #050507;
+  --light: #F5F5F5;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--darker) 0%, #1a1a1f 50%, var(--dark) 100%);
+  background-attachment: fixed;
+  color: var(--light);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated background */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(255, 23, 68, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container { position: relative; z-index: 1; }
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: linear-gradient(to bottom, rgba(10, 10, 15, 0.95), rgba(10, 10, 15, 0.7));
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary) 0%, #FFE55C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+}
+
+.nav-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-bar {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 12px;
+  padding: 8px 16px;
+  color: var(--light);
+  font-size: 13px;
+  width: 200px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.search-bar:focus {
+  border-color: var(--primary);
+  background: rgba(255, 215, 0, 0.08);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.search-bar::placeholder { color: rgba(255, 255, 255, 0.35); }
+
+.btn-admin {
+  background: linear-gradient(135deg, rgba(255, 23, 68, 0.2), rgba(255, 23, 68, 0.1));
+  border: 1.5px solid rgba(255, 23, 68, 0.6);
+  color: var(--primary);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(255, 23, 68, 0.15);
+}
+
+.btn-admin:hover {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.15));
+  border-color: var(--primary);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Banner */
+.banner {
+  position: relative;
+  height: 380px;
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.8) 0%, rgba(30, 20, 40, 0.8) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 48px;
+  overflow: hidden;
+  margin: 24px 24px 32px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(255, 23, 68, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  animation: slideUp 0.8s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.banner-tag {
+  background: linear-gradient(135deg, var(--primary) 0%, #FFE55C 100%);
+  color: var(--darker);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  text-transform: uppercase;
+}
+
+.banner-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  line-height: 1.1;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.banner-desc {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.banner-btns {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-play {
+  background: linear-gradient(135deg, var(--primary) 0%, #FFE55C 100%);
+  color: var(--darker);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
+.btn-play:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+}
+
+.btn-play:active { transform: translateY(-1px); }
+
+.btn-info {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--light);
+  border: 1.5px solid rgba(255, 215, 0, 0.3);
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-info:hover {
+  border-color: var(--primary);
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+/* Section */
+.section {
+  padding: 0 32px 40px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--light);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  padding-left: 12px;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 2px;
+}
+
+/* Movies Grid */
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.movie-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 215, 0, 0.02));
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.movie-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2), 0 0 30px rgba(255, 215, 0, 0.15);
+}
+
+.movie-poster {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  position: relative;
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.6), rgba(30, 30, 40, 0.8));
+  overflow: hidden;
+}
+
+.movie-poster::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, transparent 50%, rgba(255, 23, 68, 0.08) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.movie-card:hover .movie-poster::after { opacity: 1; }
+
+.movie-poster-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 70%);
+}
+
+.movie-info {
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.movie-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--light);
+}
+
+.movie-meta {
+  font-size: 11px;
+  color: rgba(255, 215, 0, 0.6);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.movie-genre {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 23, 68, 0.15));
+  color: var(--primary);
+  border: 0.5px solid rgba(255, 215, 0, 0.3);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.open { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(30, 30, 40, 0.95));
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 750px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.15);
+  animation: slideIn 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.btn-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  color: var(--light);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-close:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: var(--primary);
+}
+
+.video-placeholder {
+  background: linear-gradient(135deg, rgba(10, 10, 15, 0.8), rgba(20, 20, 30, 0.8));
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.08);
+}
+
+.modal-footer {
+  padding: 18px 24px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.movie-detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--light);
+}
+
+.movie-detail-meta {
+  font-size: 13px;
+  color: rgba(255, 215, 0, 0.6);
+}
+
+/* Admin Modal */
+.admin-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-modal.open { display: flex; }
+
+.admin-panel {
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.98), rgba(30, 20, 35, 0.98));
+  border: 1.5px solid rgba(255, 215, 0, 0.25);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 520px;
+  padding: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.15);
+}
+
+.admin-title {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), #FFE55C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-size: 12px;
+  color: rgba(255, 215, 0, 0.7);
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input, .form-select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--light);
+  font-size: 13px;
+  width: 100%;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--primary);
+  background: rgba(255, 215, 0, 0.08);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+#emojiPicker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#emojiPicker span {
+  cursor: pointer;
+  font-size: 24px;
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+#emojiPicker span:hover {
+  transform: scale(1.2);
+  border-color: var(--primary);
+}
+
+.btn-add {
+  background: linear-gradient(135deg, var(--primary), #FFE55C);
+  color: var(--darker);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
+.btn-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+.admin-list {
+  margin-top: 20px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s ease;
+}
+
+.admin-item:hover {
+  background: rgba(255, 215, 0, 0.05);
+  border-color: rgba(255, 215, 0, 0.2);
+}
+
+.btn-del {
+  background: rgba(255, 23, 68, 0.15);
+  border: 0.5px solid rgba(255, 23, 68, 0.4);
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-del:hover {
+  background: rgba(255, 23, 68, 0.3);
+  border-color: var(--accent);
+}
+
+.pass-screen {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.pass-screen input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--light);
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  text-align: center;
+  letter-spacing: 4px;
+  margin: 12px 0;
+  transition: all 0.3s ease;
+}
+
+.pass-screen input:focus {
+  border-color: var(--primary);
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.btn-enter {
+  background: linear-gradient(135deg, var(--primary), #FFE55C);
+  color: var(--darker);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-enter:hover {
+  transform: translateY(-2px);
+}
+
+.pass-err {
+  color: var(--accent);
+  font-size: 13px;
+  margin-top: 6px;
+  display: none;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 0;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  grid-column: 1 / -1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="navbar">
+  <div class="logo">CinemaUz</div>
+  <div class="nav-right">
+    <input class="search-bar" type="text" placeholder="Kino qidirish..." id="searchInput" oninput="filterMovies()" />
+    <button class="btn-admin" onclick="openAdmin()"><i class="ti ti-shield-lock"></i> Admin</button>
+  </div>
+</div>
+
+<div class="banner" id="bannerSection">
+  <div class="banner-content">
+    <span class="banner-tag">Tavsiya etilgan</span>
+    <div class="banner-title" id="bannerTitle">Kinolaringizni qo'shing</div>
+    <div class="banner-desc" id="bannerDesc">Admin panelga kirib, kinolaringizni Terabox yoki Google Drive link bilan qo'shing va do'stlaringiz bilan baham ko'ring.</div>
+    <div class="banner-btns">
+      <button class="btn-play" onclick="openAdminDirect()"><i class="ti ti-plus"></i> Boshlash</button>
+      <button class="btn-info" onclick="scrollToMovies()"><i class="ti ti-arrow-down"></i> Kinolarni ko'rish</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title" id="sectionLabel">Barcha kinolar</div>
+  <div class="movies-grid" id="moviesGrid">
+    <div class="empty-state" id="emptyState">
+      <i class="ti ti-movie" style="font-size:48px; display:block; margin-bottom:12px; opacity:0.3;"></i>
+      Hali kino qo'shilmagan. Admin paneldan kino qo'shing!
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="modal-overlay" id="movieModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalMovieTitle">Kino</span>
+      <button class="btn-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="video-placeholder" id="videoArea">
+      <i class="ti ti-player-play" style="font-size:48px;opacity:0.3;"></i>
+      <div>Video yuklanmoqda...</div>
+    </div>
+    <div class="modal-footer">
+      <div class="movie-detail-title" id="modalTitle2"></div>
+      <div class="movie-detail-meta" id="modalMeta"></div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-modal" id="adminModal">
+  <div class="admin-panel">
+    <div id="passScreen">
+      <div style="font-size:40px; color:var(--primary); margin-bottom:12px;"><i class="ti ti-shield-lock"></i></div>
+      <div style="font-size:18px; font-weight:700; margin-bottom:4px;">Admin Panel</div>
+      <div style="font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:16px;">Parolni kiriting</div>
+      <input type="password" id="passInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPass()" />
+      <div class="pass-err" id="passErr">❌ Noto'g'ri parol!</div>
+      <button class="btn-enter" style="width:100%;margin-top:12px;" onclick="checkPass()">Kirish</button>
+      <br><br>
+      <button onclick="closeAdminModal()" style="background:transparent;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:13px;text-decoration:underline;">Bekor qilish</button>
+    </div>
+    <div id="adminContent" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <div class="admin-title"><i class="ti ti-movie"></i> Kino qo'shish</div>
+        <button onclick="closeAdminModal()" class="btn-close" style="width:28px;height:28px;">✕</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kino nomi</label>
+        <input class="form-input" id="movieName" type="text" placeholder="Masalan: Inception" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Janr</label>
+          <select class="form-select" id="movieGenre">
+            <option value="Drama">Drama</option>
+            <option value="Triller">Triller</option>
+            <option value="Komediya">Komediya</option>
+            <option value="Fantastika">Fantastika</option>
+            <option value="Romantik">Romantik</option>
+            <option value="Jangari">Jangari</option>
+            <option value="Animatsiya">Animatsiya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Yil</label>
+          <input class="form-input" id="movieYear" type="text" placeholder="2024" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Video link (Terabox / Google Drive)</label>
+        <input class="form-input" id="movieLink" type="text" placeholder="https://..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Emoji poster uchun</label>
+        <div id="emojiPicker">
+          <span onclick="selectEmoji(this)" data-emoji="🎬">🎬</span>
+          <span onclick="selectEmoji(this)" data-emoji="🚀">🚀</span>
+          <span onclick="selectEmoji(this)" data-emoji="👻">👻</span>
+          <span onclick="selectEmoji(this)" data-emoji="❤️">❤️</span>
+          <span onclick="selectEmoji(this)" data-emoji="⚡">⚡</span>
+          <span onclick="selectEmoji(this)" data-emoji="🔥">🔥</span>
+          <span onclick="selectEmoji(this)" data-emoji="🌙">🌙</span>
+          <span onclick="selectEmoji(this)" data-emoji="💀">💀</span>
+          <span onclick="selectEmoji(this)" data-emoji="🎭">🎭</span>
+          <span onclick="selectEmoji(this)" data-emoji="🌟">🌟</span>
+        </div>
+      </div>
+      <button class="btn-add" onclick="addMovie()"><i class="ti ti-plus"></i> Kino qo'shish</button>
+      <div class="admin-list" id="adminList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_PASSWORD = "PixelNova2026";
+let movies = [];
+let selectedEmoji = "🎬";
+
+function selectEmoji(el) {
+  document.querySelectorAll('#emojiPicker span').forEach(s => s.style.background = '');
+  el.style.background = 'rgba(255, 215, 0, 0.2)';
+  selectedEmoji = el.dataset.emoji;
+}
+
+function openAdmin() {
+  document.getElementById('adminModal').classList.add('open');
+  document.getElementById('passScreen').style.display = 'block';
+  document.getElementById('adminContent').style.display = 'none';
+  document.getElementById('passInput').value = '';
+  document.getElementById('passErr').style.display = 'none';
+}
+
+function openAdminDirect() { openAdmin(); }
+
+function closeAdminModal() {
+  document.getElementById('adminModal').classList.remove('open');
+}
+
+function checkPass() {
+  const val = document.getElementById('passInput').value;
+  if (val === ADMIN_PASSWORD) {
+    document.getElementById('passScreen').style.display = 'none';
+    document.getElementById('adminContent').style.display = 'block';
+    renderAdminList();
+  } else {
+    document.getElementById('passErr').style.display = 'block';
+    document.getElementById('passInput').value = '';
+  }
+}
+
+function addMovie() {
+  const name = document.getElementById('movieName').value.trim();
+  const genre = document.getElementById('movieGenre').value;
+  const year = document.getElementById('movieYear').value.trim();
+  const link = document.getElementById('movieLink').value.trim();
+  if (!name || !link) { alert("Kino nomi va link kerak!"); return; }
+  movies.push({ id: Date.now(), name, genre, year, link, emoji: selectedEmoji });
+  document.getElementById('movieName').value = '';
+  document.getElementById('movieLink').value = '';
+  document.getElementById('movieYear').value = '';
+  renderMovies();
+  renderAdminList();
+  updateBanner();
+}
+
+function deleteMovie(id) {
+  movies = movies.filter(m => m.id !== id);
+  renderMovies();
+  renderAdminList();
+  updateBanner();
+}
+
+function renderAdminList() {
+  const list = document.getElementById('adminList');
+  if (movies.length === 0) { list.innerHTML = ''; return; }
+  list.innerHTML = movies.map(m => `<div class="admin-item"><span>${m.emoji} ${m.name}</span><button class="btn-del" onclick="deleteMovie(${m.id})"><i class="ti ti-trash"></i></button></div>`).join('');
+}
+
+function renderMovies() {
+  const grid = document.getElementById('moviesGrid');
+  if (movies.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><i class="ti ti-movie" style="font-size:48px;opacity:0.3;"></i>Hali kino qo\'shilmagan!</div>';
+    return;
+  }
+  grid.innerHTML = movies.map((m, i) => `
+    <div class="movie-card" onclick="openMovie(${m.id})">
+      <div class="movie-poster">${m.emoji}<div class="movie-poster-overlay"></div></div>
+      <div class="movie-info">
+        <div class="movie-title">${m.name}</div>
+        <div class="movie-meta">${m.year || 'Noma\'lum'}</div>
+        <span class="movie-genre">${m.genre}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterMovies() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const label = document.getElementById('sectionLabel');
+  if (!q) { label.textContent = 'Barcha kinolar'; renderMovies(); return; }
+  const filtered = movies.filter(m => m.name.toLowerCase().includes(q) || m.genre.toLowerCase().includes(q));
+  label.textContent = `Qidiruv: "${q}"`;
+  const grid = document.getElementById('moviesGrid');
+  grid.innerHTML = filtered.length === 0 ? '<div class="empty-state" style="grid-column:1/-1;">Kino topilmadi</div>' : filtered.map(m => `
+    <div class="movie-card" onclick="openMovie(${m.id})">
+      <div class="movie-poster">${m.emoji}<div class="movie-poster-overlay"></div></div>
+      <div class="movie-info">
+        <div class="movie-title">${m.name}</div>
+        <div class="movie-meta">${m.year || 'Noma\'lum'}</div>
+        <span class="movie-genre">${m.genre}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateBanner() {
+  if (movies.length === 0) {
+    document.getElementById('bannerTitle').textContent = 'Kinolaringizni qo\'shing';
+    document.getElementById('bannerDesc').textContent = 'Admin panelga kirib, kinolaringizni Terabox yoki Google Drive link bilan qo\'shing.';
+    return;
+  }
+  const last = movies[movies.length - 1];
+  document.getElementById('bannerTitle').textContent = last.emoji + ' ' + last.name;
+  document.getElementById('bannerDesc').textContent = last.genre + (last.year ? ' · ' + last.year : '');
+}
+
+function openMovie(id) {
+  const movie = movies.find(m => m.id === id);
+  if (!movie) return;
+  document.getElementById('modalMovieTitle').textContent = movie.name;
+  document.getElementById('modalTitle2').textContent = movie.emoji + ' ' + movie.name;
+  document.getElementById('modalMeta').textContent = movie.genre + (movie.year ? ' · ' + movie.year : '');
+  
+  const link = movie.link;
+  let embedHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:12px;"><i class="ti ti-alert-triangle" style="font-size:48px;opacity:0.3;"></i><div>Video player aktivlanmoqda...</div></div>';
+  
+  if (link.includes('terabox.com')) {
+    const id_match = link.match(/\/s\/([^\?]+)/);
+    if (id_match) embedHTML = `<iframe src="https://pan.terabox.com/share/list?surl=${id_match[1]}" width="100%" height="360" frameborder="0" style="border:none;"></iframe>`;
+  } else if (link.includes('drive.google.com')) {
+    const id_match = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (id_match) embedHTML = `<iframe src="https://drive.google.com/file/d/${id_match[1]}/preview" width="100%" height="360" frameborder="0" allow="autoplay" style="border:none;"></iframe>`;
+  }
+  
+  document.getElementById('videoArea').innerHTML = embedHTML;
+  document.getElementById('movieModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('movieModal').classList.remove('open');
+}
+
+function scrollToMovies() {
+  document.getElementById('moviesGrid').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.getElementById('movieModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.getElementById('adminModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAdminModal();
+});
+</script>
+
+</body>
+</html>
